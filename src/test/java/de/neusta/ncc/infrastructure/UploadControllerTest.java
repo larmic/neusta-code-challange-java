@@ -135,7 +135,6 @@ public class UploadControllerTest {
         assertThat(exchange.getBody().getError()).isEqualTo("Method Not Allowed");
         assertThat(exchange.getBody().getMessage()).isEqualTo("Request method '" + httpMethod.name() + "' not supported");
         assertThat(exchange.getBody().getPath()).isEqualTo("/api/import");
-        assertThat(exchange.getBody().getException()).isEqualTo("org.springframework.web.HttpRequestMethodNotSupportedException");
     }
 
 }
