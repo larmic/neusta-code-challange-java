@@ -9,7 +9,6 @@ import de.neusta.ncc.application.validator.exception.RoomNumberNotValidException
 import de.neusta.ncc.domain.Person;
 import de.neusta.ncc.domain.Room;
 import de.neusta.ncc.domain.RoomRepository;
-import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class RoomImportService {
     }
 
     public void importRooms(List<Room> rooms)
-            throws CsvPersonNotValidException, RoomNumberNotValidException, RoomIsNotUniqueException, LdapUserIsNotUniqueException {
+            throws RoomNumberNotValidException, RoomIsNotUniqueException, LdapUserIsNotUniqueException {
         validateRoomNumber(rooms);
         validateRoomNumbersAreUnique(rooms);
         validateLdapUsersAreUnique(rooms);
