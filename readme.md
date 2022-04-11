@@ -42,7 +42,7 @@ Due to time constrains no ARC42 documentation is created.
 
 ## Requirements
 
-* Java 1.8
+* Java 17
 * Maven >= 3.2.1
 * Docker optional
 
