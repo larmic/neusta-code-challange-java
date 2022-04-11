@@ -1,4 +1,7 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM eclipse-temurin:17
+
+MAINTAINER Lars Michaelis <mail@larmic.de>
+
 VOLUME /tmp
 ADD ncc.jar app.jar
 RUN sh -c 'touch /app.jar'
