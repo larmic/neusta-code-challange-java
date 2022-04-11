@@ -1,6 +1,7 @@
 # Neusta Code Challenge
 
 [![Java CI with Maven](https://github.com/larmic/neusta-code-challange-java/actions/workflows/maven.yml/badge.svg)](https://github.com/larmic/neusta-code-challange-java/actions/workflows/maven.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Introduction
 
