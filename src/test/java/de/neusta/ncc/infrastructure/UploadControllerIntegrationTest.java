@@ -3,13 +3,11 @@ package de.neusta.ncc.infrastructure;
 import de.neusta.ncc.domain.Room;
 import de.neusta.ncc.domain.RoomRepository;
 import de.neusta.ncc.infrastructure.dto.ImportResultDto;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -17,7 +15,6 @@ import static org.assertj.core.api.Assertions.tuple;
 /**
  * Complete (happy path) integration test. For validation and mapping tests see {@link UploadControllerTest}.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UploadControllerIntegrationTest {
 

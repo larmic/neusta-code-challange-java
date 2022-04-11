@@ -1,10 +1,9 @@
 package de.neusta.ncc.application.validator;
 
 import de.neusta.ncc.application.validator.exception.RoomNumberNotValidException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.*;
 
 public class RoomNumberValidatorTest {
 
@@ -33,22 +32,23 @@ public class RoomNumberValidatorTest {
         assertException("ÄÜÖ?ZZZZ");
     }
 
-    @Test(expected = RoomNumberNotValidException.class)
+    @Test
     public void validateWithEmptyValue() {
-        validator.validate("");
+        assertThatThrownBy(() -> validator.validate(""))
+                .isInstanceOf(RoomNumberNotValidException.class)
+                .hasMessageContaining("Room with number  must have 4 arbitrary characters.");
     }
 
-    @Test(expected = RoomNumberNotValidException.class)
+    @Test
     public void validateWithNullValue() {
-        validator.validate(null);
+        assertThatThrownBy(() -> validator.validate(null))
+                .isInstanceOf(RoomNumberNotValidException.class)
+                .hasMessageContaining("Room with number null must have 4 arbitrary characters.");
     }
 
     private void assertException(String room) {
-        try {
-            validator.validate(room);
-            fail("Should throw exception");
-        } catch (RoomNumberNotValidException e) {
-            assertThat(e.getMessage()).isEqualTo("Room with number " + room + " must have 4 arbitrary characters.");
-        }
+        assertThatThrownBy(() -> validator.validate(room))
+                .isInstanceOf(RoomNumberNotValidException.class)
+                .hasMessageContaining("Room with number " + room + " must have 4 arbitrary characters.");
     }
 }

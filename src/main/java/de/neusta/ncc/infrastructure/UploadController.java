@@ -1,20 +1,19 @@
 package de.neusta.ncc.infrastructure;
 
 import de.neusta.ncc.application.RoomImportService;
-import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
 import de.neusta.ncc.application.validator.exception.LdapUserIsNotUniqueException;
 import de.neusta.ncc.application.validator.exception.RoomIsNotUniqueException;
 import de.neusta.ncc.application.validator.exception.RoomNumberNotValidException;
 import de.neusta.ncc.domain.Room;
-import de.neusta.ncc.infrastructure.dto.DefaultSpringErrorDto;
 import de.neusta.ncc.infrastructure.dto.ErrorMessageDto;
 import de.neusta.ncc.infrastructure.dto.ImportResultDto;
 import de.neusta.ncc.infrastructure.mapper.CsvImportMapper;
+import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
 import de.neusta.ncc.infrastructure.mapper.exception.EmptyFileImportException;
 import de.neusta.ncc.infrastructure.mapper.exception.FileImportException;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,17 +37,23 @@ public class UploadController {
         this.roomImportService = roomImportService;
     }
 
-    @ApiOperation(value = "Imports a csv file to internal data storage.",
-            notes = "Csv file should have the following syntax:"
-                    + " Room number, person1, person2, person3, ..."
-                    + " where person should be like:"
-                    + " title firstname extraname addition lastname (ldapUserName)")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ImportResultDto.class),
-            @ApiResponse(code = 400, message = "Import failure", response = ErrorMessageDto.class),
-            @ApiResponse(code = 405, message = "Wrong method type", response = DefaultSpringErrorDto.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = DefaultSpringErrorDto.class)
-    })
+    @Operation(
+            summary = "Imports a csv file to internal data storage.",
+            description = """ 
+                    Csv file should have the following syntax:
+                    Room number, person1, person2, person3, ...
+                    where person should be like:
+                    title firstname extraname addition lastname (ldapUserName)
+                    """
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Import failure"),
+                    @ApiResponse(responseCode = "405", description = "Wrong method type"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @RequestMapping(value = "/api/import", method = RequestMethod.POST, consumes = {"multipart/form-data"}, produces = {"application/json"})
     public ResponseEntity uploadCsv(@RequestParam MultipartFile file) {
         try {

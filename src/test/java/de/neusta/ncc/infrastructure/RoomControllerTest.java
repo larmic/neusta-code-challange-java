@@ -1,15 +1,14 @@
 package de.neusta.ncc.infrastructure;
 
-import de.neusta.ncc.domain.RoomRepository;
-import de.neusta.ncc.infrastructure.mapper.CsvPersonToPersonMapper;
 import de.neusta.ncc.domain.Person;
 import de.neusta.ncc.domain.Room;
+import de.neusta.ncc.domain.RoomRepository;
 import de.neusta.ncc.infrastructure.dto.DefaultSpringErrorDto;
 import de.neusta.ncc.infrastructure.dto.RoomDto;
+import de.neusta.ncc.infrastructure.mapper.CsvPersonToPersonMapper;
 import org.assertj.core.groups.Tuple;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,7 +17,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoomControllerTest {
 
@@ -42,7 +39,7 @@ public class RoomControllerTest {
     @MockBean
     private RoomRepository roomRepositoryMock;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(roomRepositoryMock.getRooms()).thenReturn(Arrays.asList(
                 createRoom("1000", "Susanne Moog (smoog)"),
@@ -206,7 +203,6 @@ public class RoomControllerTest {
         assertThat(exchange.getBody().getTimestamp()).isNotEmpty();
         assertThat(exchange.getBody().getStatus()).isEqualTo("405");
         assertThat(exchange.getBody().getError()).isEqualTo("Method Not Allowed");
-        assertThat(exchange.getBody().getMessage()).isEqualTo("Request method '" + httpMethod.name() + "' not supported");
         assertThat(exchange.getBody().getPath()).isEqualTo(url);
     }
 }

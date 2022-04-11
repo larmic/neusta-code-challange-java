@@ -4,9 +4,12 @@ import de.neusta.ncc.domain.Person;
 import de.neusta.ncc.domain.PersonAddition;
 import de.neusta.ncc.domain.PersonTitle;
 import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CsvPersonToPersonMapperTest {
 
@@ -121,33 +124,39 @@ public class CsvPersonToPersonMapperTest {
         assertThat(mappedPerson.getLdapUser()).isEqualTo("acole");
     }
 
-    @Test(expected = CsvPersonNotValidException.class)
+    @Test
     public void testMapWithThreeNamesAndNoAddition() {
-        Person mappedPerson = mapper.map("Alexander James Cole Pinnhammer (acole)");
-        assertThat(mappedPerson.getTitle()).isNull();
-        assertThat(mappedPerson.getFirstName()).isEqualTo("Alexander");
-        assertThat(mappedPerson.getAddition()).isEqualTo(PersonAddition.VON);
-        assertThat(mappedPerson.getLastName()).isEqualTo("Van");
-        assertThat(mappedPerson.getLdapUser()).isEqualTo("acole");
+        assertThatThrownBy(() -> mapper.map("Alexander James Cole Pinnhammer (acole)"))
+                .isInstanceOf(CsvPersonNotValidException.class)
+                .hasMessageContaining("Could not map csv person 'Alexander James Cole Pinnhammer (acole)'");
     }
 
-    @Test(expected = CsvPersonNotValidException.class)
+    @Test
     public void testMapWithoutFirstName() {
-        mapper.map("Pinnhammer (jpinnhammer)");
+        assertThatThrownBy(() -> mapper.map("Pinnhammer (jpinnhammer)"))
+                .isInstanceOf(CsvPersonNotValidException.class)
+                .hasMessageContaining("Could not map csv person 'Pinnhammer (jpinnhammer)'");
     }
 
-    @Test(expected = CsvPersonNotValidException.class)
+    @Test
     public void testMapWithoutLastName() {
-        mapper.map("Janina (jpinnhammer)");
+        assertThatThrownBy(() -> mapper.map("Janina (jpinnhammer)"))
+                .isInstanceOf(CsvPersonNotValidException.class)
+                .hasMessageContaining("Could not map csv person 'Janina (jpinnhammer)'");
     }
 
-    @Test(expected = CsvPersonNotValidException.class)
+    @Test
     public void testMapWithoutLdap() {
-        mapper.map("Janina von Pinnhammer");
+        assertThatThrownBy(() -> mapper.map("Janina von Pinnhammer"))
+                .isInstanceOf(CsvPersonNotValidException.class)
+                .hasMessageContaining("Could not map csv person 'Janina von Pinnhammer'");
     }
 
-    @Test(expected = CsvPersonNotValidException.class)
-    public void testMapWithEmptyPerson() {
-        mapper.map("");
+    @ParameterizedTest
+    @ValueSource(strings = {"", "  ", "     "})
+    public void testMapWithEmptyPerson(final String empty) {
+        assertThatThrownBy(() -> mapper.map(empty))
+                .isInstanceOf(CsvPersonNotValidException.class)
+                .hasMessageContaining("Could not map csv person '" + empty + "'");
     }
 }

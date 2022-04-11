@@ -1,8 +1,9 @@
 package de.neusta.ncc.domain;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PersonAdditionTest {
 
@@ -27,8 +28,10 @@ public class PersonAdditionTest {
         assertThat(PersonAddition.valueOfByLabel(null)).isNull();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testValueOfByLabelWithLabelIsUnknown() {
-        PersonAddition.valueOfByLabel("not-known");
+        assertThatThrownBy(() -> PersonAddition.valueOfByLabel("not-known"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Person addition not-known is not supported");
     }
 }

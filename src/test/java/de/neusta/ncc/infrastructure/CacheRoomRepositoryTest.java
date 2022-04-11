@@ -2,13 +2,14 @@ package de.neusta.ncc.infrastructure;
 
 import de.neusta.ncc.domain.Person;
 import de.neusta.ncc.domain.Room;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CacheRoomRepositoryTest {
 
@@ -17,7 +18,7 @@ public class CacheRoomRepositoryTest {
     private Room room1;
     private Room room2;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         roomRepository = new CacheRoomRepository();
 
@@ -48,16 +49,20 @@ public class CacheRoomRepositoryTest {
         assertThat(roomRepository.getRooms()).containsExactly(room1);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetRoomsIsUnmodifiable() {
         roomRepository.replaceRooms(Collections.singletonList(room1));
 
-        roomRepository.getRooms().add(room2);
+        assertThatThrownBy(() -> roomRepository.getRooms().add(room2))
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessage(null);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetRoomsIsUnmodifiableOnInit() {
-        roomRepository.getRooms().add(room1);
+        assertThatThrownBy(() -> roomRepository.getRooms().add(room1))
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessage(null);
     }
 
     @Test

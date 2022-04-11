@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ 1.8 ]
+        java: [ 17,18 ]
 
     name: Java ${{ matrix.java }} compile
 

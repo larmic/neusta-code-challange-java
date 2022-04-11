@@ -3,16 +3,12 @@ package de.neusta.ncc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static springfox.documentation.builders.PathSelectors.regex;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
 
 @SpringBootApplication
-@EnableSwagger2
 public class NccApplication {
 
     public static void main(String[] args) {
@@ -21,21 +17,12 @@ public class NccApplication {
     }
 
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("api")
-                .useDefaultResponseMessages(false)
-                .apiInfo(apiInfo())
-                .select()
-                .paths(regex("/api/.*"))
-                .build();
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Neusta code challenge REST services")
-                .version("1.0")
-                .build();
+    public OpenAPI api() {
+        return new OpenAPI().info(
+                new Info().title("Neusta code challenge REST services")
+                        .version("0.0.1")
+                        .contact(new Contact().name("Lars Michaelis").email("l.michaelis@neusta.de"))
+        );
     }
 
 }

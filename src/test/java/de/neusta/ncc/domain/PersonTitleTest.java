@@ -1,8 +1,10 @@
 package de.neusta.ncc.domain;
 
-import org.junit.Test;
+import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PersonTitleTest {
 
@@ -23,8 +25,10 @@ public class PersonTitleTest {
         assertThat(PersonTitle.valueOfByLabel(null)).isNull();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testValueOfByLabelWithLabelIsUnknown() {
-        PersonTitle.valueOfByLabel("not-known");
+        assertThatThrownBy(() -> PersonTitle.valueOfByLabel("not-known"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Person title not-known is not supported");
     }
 }

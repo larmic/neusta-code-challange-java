@@ -1,27 +1,25 @@
 package de.neusta.ncc.infrastructure;
 
 import de.neusta.ncc.application.RoomImportService;
-import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
 import de.neusta.ncc.application.validator.exception.LdapUserIsNotUniqueException;
-import de.neusta.ncc.application.validator.exception.RoomNumberNotValidException;
 import de.neusta.ncc.application.validator.exception.RoomIsNotUniqueException;
+import de.neusta.ncc.application.validator.exception.RoomNumberNotValidException;
+import de.neusta.ncc.infrastructure.dto.DefaultSpringErrorDto;
+import de.neusta.ncc.infrastructure.mapper.CsvImportMapper;
+import de.neusta.ncc.infrastructure.mapper.exception.CsvPersonNotValidException;
 import de.neusta.ncc.infrastructure.mapper.exception.EmptyFileImportException;
 import de.neusta.ncc.infrastructure.mapper.exception.FileImportException;
-import de.neusta.ncc.infrastructure.mapper.CsvImportMapper;
-import de.neusta.ncc.infrastructure.dto.DefaultSpringErrorDto;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +28,6 @@ import static org.mockito.Mockito.when;
  * <p>
  * Mocks inner mapper and services to be loosely coupled from core logic.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UploadControllerTest {
 
@@ -66,7 +63,9 @@ public class UploadControllerTest {
         final ResponseEntity<String> exchange = uploadRequestSender.sendUploadRequest(null, String.class);
 
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(exchange.getBody()).contains("\"message\":\"Required request part 'file' is not present\"");
+        assertThat(exchange.getBody()).contains("\"status\":400");
+        assertThat(exchange.getBody()).contains("\"error\":\"Bad Request\"");
+        assertThat(exchange.getBody()).contains("\"path\":\"/api/import\"");
     }
 
     @Test
@@ -133,7 +132,6 @@ public class UploadControllerTest {
         assertThat(exchange.getBody().getTimestamp()).isNotEmpty();
         assertThat(exchange.getBody().getStatus()).isEqualTo("405");
         assertThat(exchange.getBody().getError()).isEqualTo("Method Not Allowed");
-        assertThat(exchange.getBody().getMessage()).isEqualTo("Request method '" + httpMethod.name() + "' not supported");
         assertThat(exchange.getBody().getPath()).isEqualTo("/api/import");
     }
 

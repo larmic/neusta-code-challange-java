@@ -2,11 +2,12 @@ package de.neusta.ncc.infrastructure;
 
 import de.neusta.ncc.domain.Room;
 import de.neusta.ncc.domain.RoomRepository;
-import de.neusta.ncc.infrastructure.dto.DefaultSpringErrorDto;
 import de.neusta.ncc.infrastructure.dto.ErrorMessageDto;
 import de.neusta.ncc.infrastructure.dto.RoomDto;
 import de.neusta.ncc.infrastructure.mapper.RoomMapper;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,16 +29,17 @@ public class RoomController {
         this.roomMapper = roomMapper;
     }
 
-    @ApiOperation(value = "Loads all existing rooms.",
-            notes = "If a ldap user name query parameter is used all rooms with persons contains parts of this name will be returned.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ldapUser", value = "Optional ldap user name", dataType = "string", paramType = "query", example = "acole"),
-    })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 405, message = "Wrong method type", response = DefaultSpringErrorDto.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = DefaultSpringErrorDto.class)
-    })
+    @Operation(
+            summary = "Loads all existing rooms.",
+            description = "If a ldap user name query parameter is used all rooms with persons contains parts of this name will be returned."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "405", description = "Wrong method type"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @RequestMapping(value = "/api/room", method = RequestMethod.GET, produces = {"application/json"})
     public ResponseEntity<List<RoomDto>> getAllRooms(@RequestParam(required = false) String ldapUser) {
         final List<Room> rooms = isLdapUserSet(ldapUser) ? findRoomsByLdapUser(ldapUser) : getAllRooms();
@@ -49,15 +51,17 @@ public class RoomController {
         return ResponseEntity.ok(roomDtos);
     }
 
-    @ApiOperation(value = "Loads a specific room for a given number.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = RoomDto.class),
-            @ApiResponse(code = 404, message = "Room for number not found", response = ErrorMessageDto.class),
-            @ApiResponse(code = 405, message = "Wrong method type", response = DefaultSpringErrorDto.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = DefaultSpringErrorDto.class)
-    })
+    @Operation(summary = "Loads a specific room for a given number.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "404", description = "Room for number not found"),
+                    @ApiResponse(responseCode = "405", description = "Wrong method type"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @RequestMapping(value = "/api/room/{number}", method = RequestMethod.GET, produces = {"application/json"})
-    public ResponseEntity getRoom(@PathVariable String number) {
+    public ResponseEntity<?> getRoom(@PathVariable String number) {
         if (!isRoomNumberValid(number)) {
             return new ResponseEntity<>(new ErrorMessageDto(6, String.format("Room with number %s must have 4 arbitrary characters.", number)), HttpStatus.BAD_REQUEST);
         }

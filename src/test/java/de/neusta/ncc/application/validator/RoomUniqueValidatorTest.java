@@ -1,7 +1,7 @@
 package de.neusta.ncc.application.validator;
 
 import de.neusta.ncc.application.validator.exception.RoomIsNotUniqueException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;

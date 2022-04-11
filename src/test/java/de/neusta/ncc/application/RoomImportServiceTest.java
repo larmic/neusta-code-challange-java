@@ -10,8 +10,8 @@ import de.neusta.ncc.domain.Person;
 import de.neusta.ncc.domain.PersonTitle;
 import de.neusta.ncc.domain.Room;
 import de.neusta.ncc.infrastructure.CacheRoomRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public class RoomImportServiceTest {
     private Person alex;
     private Person samin;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         roomImportService = new RoomImportService(
                 new RoomNumberValidator(),
