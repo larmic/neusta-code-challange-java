@@ -1,5 +1,7 @@
 # Neusta Code Challenge
 
+[![Java CI with Maven](https://github.com/larmic/neusta-code-challange-java/actions/workflows/maven.yml/badge.svg)](https://github.com/larmic/neusta-code-challange-java/actions/workflows/maven.yml)
+
 ## Introduction
 
 This is a submission to the neusta code challenge 2017. 
