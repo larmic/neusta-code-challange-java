@@ -30,7 +30,7 @@
 
         <!-- libs -->
         <jackson-dataformat-csv.version>2.13.2</jackson-dataformat-csv.version>
-        <swagger.version>1.6.7</swagger.version>
+        <swagger.version>1.6.8</swagger.version>
 
         <!-- testing -->
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
