@@ -29,7 +29,7 @@
         <java.version>17</java.version>
 
         <!-- libs -->
-        <jackson-dataformat-csv.version>2.13.2</jackson-dataformat-csv.version>
+        <jackson-dataformat-csv.version>2.13.3</jackson-dataformat-csv.version>
         <swagger.version>1.6.8</swagger.version>
 
         <!-- testing -->
